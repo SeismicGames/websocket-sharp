@@ -2,22 +2,20 @@
 <package >
   <metadata>
     <id>SeismicGames.websocket</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <authors>sta</authors>
     <owners>SeismicGames</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Websocket library that works in Unity and otherwise.</description>
     <copyright>Copyright 2017</copyright>
     <releaseNotes>
+      1.0.3 - Remove all the .NETCore garbage.
       1.0.2 - Include meta files to avoid Unity issues.
       1.0.1 - Add .NETCore support, hopefully doesn't break Unity.
       1.0.0 - initial drop.
     </releaseNotes>
   </metadata>
   <files>
-    <file src="websocket-sharp\bin\Release\websocket-sharp.dll" target="lib\netcoreapp1.0\websocket-sharp.dll" />
-    <file src="UnityMetas\exclude_dll.meta" target="lib\netcoreapp1.0\websocket-sharp.dll.meta" />
     <file src="websocket-sharp\bin\Release\websocket-sharp.dll" target="lib\net35-unity subset v3.5\websocket-sharp.dll" />
-    <file src="UnityMetas\include_dll.meta" target="lib\net35-unity subset v3.5\websocket-sharp.dll.meta" />
   </files>
 </package>

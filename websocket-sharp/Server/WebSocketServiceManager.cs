@@ -263,10 +263,13 @@ namespace WebSocketSharp.Server
     private void broadcast (Opcode opcode, byte[] data, Action completed)
     {
       var cache = new Dictionary<CompressionMethod, byte[]> ();
+
       try {
         foreach (var host in Hosts) {
-          if (_state != ServerState.Start)
+          if (_state != ServerState.Start) {
+            _log.Error ("The server is shutting down.");
             break;
+          }
 
           host.Sessions.Broadcast (opcode, data, cache);
         }
@@ -286,10 +289,13 @@ namespace WebSocketSharp.Server
     private void broadcast (Opcode opcode, Stream stream, Action completed)
     {
       var cache = new Dictionary<CompressionMethod, Stream> ();
+
       try {
         foreach (var host in Hosts) {
-          if (_state != ServerState.Start)
+          if (_state != ServerState.Start) {
+            _log.Error ("The server is shutting down.");
             break;
+          }
 
           host.Sessions.Broadcast (opcode, stream, cache);
         }
@@ -330,10 +336,13 @@ namespace WebSocketSharp.Server
       var ret = new Dictionary<string, Dictionary<string, bool>> ();
 
       foreach (var host in Hosts) {
-        if (_state != ServerState.Start)
+        if (_state != ServerState.Start) {
+          _log.Error ("The server is shutting down.");
           break;
+        }
 
-        ret.Add (host.Path, host.Sessions.Broadping (frameAsBytes, timeout));
+        var res = host.Sessions.Broadping (frameAsBytes, timeout);
+        ret.Add (host.Path, res);
       }
 
       return ret;
@@ -504,12 +513,10 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends the specified <paramref name="data"/> to
-    /// every client in the WebSocket services.
+    /// Sends <paramref name="data"/> to every client in the WebSocket services.
     /// </summary>
     /// <param name="data">
-    /// An array of <see cref="byte"/> that represents
-    /// the binary data to send.
+    /// An array of <see cref="byte"/> that represents the binary data to send.
     /// </param>
     /// <exception cref="InvalidOperationException">
     /// The current state of the manager is not Start.
@@ -535,8 +542,7 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends the specified <paramref name="data"/> to
-    /// every client in the WebSocket services.
+    /// Sends <paramref name="data"/> to every client in the WebSocket services.
     /// </summary>
     /// <param name="data">
     /// A <see cref="string"/> that represents the text data to send.
@@ -574,24 +580,22 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends the specified <paramref name="data"/> asynchronously to
-    /// every client in the WebSocket services.
+    /// Sends <paramref name="data"/> asynchronously to every client in
+    /// the WebSocket services.
     /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
     /// <param name="data">
-    /// An array of <see cref="byte"/> that represents
-    /// the binary data to send.
+    /// An array of <see cref="byte"/> that represents the binary data to send.
     /// </param>
     /// <param name="completed">
     ///   <para>
-    ///   An <see cref="Action"/> delegate or
-    ///   <see langword="null"/> if not needed.
+    ///   An <see cref="Action"/> delegate or <see langword="null"/>
+    ///   if not needed.
     ///   </para>
     ///   <para>
-    ///   That delegate invokes the method called when
-    ///   the send is complete.
+    ///   The delegate invokes the method called when the send is complete.
     ///   </para>
     /// </param>
     /// <exception cref="InvalidOperationException">
@@ -618,8 +622,8 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends the specified <paramref name="data"/> asynchronously to
-    /// every client in the WebSocket services.
+    /// Sends <paramref name="data"/> asynchronously to every client in
+    /// the WebSocket services.
     /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
@@ -629,12 +633,11 @@ namespace WebSocketSharp.Server
     /// </param>
     /// <param name="completed">
     ///   <para>
-    ///   An <see cref="Action"/> delegate or
-    ///   <see langword="null"/> if not needed.
+    ///   An <see cref="Action"/> delegate or <see langword="null"/>
+    ///   if not needed.
     ///   </para>
     ///   <para>
-    ///   That delegate invokes the method called when
-    ///   the send is complete.
+    ///   The delegate invokes the method called when the send is complete.
     ///   </para>
     /// </param>
     /// <exception cref="InvalidOperationException">
@@ -670,28 +673,30 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends the specified <paramref name="length"/> of data from
-    /// the specified <paramref name="stream"/> asynchronously to
+    /// Sends the data from <paramref name="stream"/> asynchronously to
     /// every client in the WebSocket services.
     /// </summary>
     /// <remarks>
-    /// This method does not wait for the send to be complete.
+    ///   <para>
+    ///   The data is sent as the binary data.
+    ///   </para>
+    ///   <para>
+    ///   This method does not wait for the send to be complete.
+    ///   </para>
     /// </remarks>
     /// <param name="stream">
-    /// A <see cref="Stream"/> from which to read the binary data to send.
+    /// A <see cref="Stream"/> instance from which to read the data to send.
     /// </param>
     /// <param name="length">
-    /// An <see cref="int"/> that specifies the number of bytes to
-    /// read and send.
+    /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
     /// <param name="completed">
     ///   <para>
-    ///   An <see cref="Action"/> delegate or
-    ///   <see langword="null"/> if not needed.
+    ///   An <see cref="Action"/> delegate or <see langword="null"/>
+    ///   if not needed.
     ///   </para>
     ///   <para>
-    ///   That delegate invokes the method called when
-    ///   the send is complete.
+    ///   The delegate invokes the method called when the send is complete.
     ///   </para>
     /// </param>
     /// <exception cref="InvalidOperationException">
@@ -728,11 +733,15 @@ namespace WebSocketSharp.Server
       if (stream == null)
         throw new ArgumentNullException ("stream");
 
-      if (!stream.CanRead)
-        throw new ArgumentException ("It cannot be read.", "stream");
+      if (!stream.CanRead) {
+        var msg = "It cannot be read.";
+        throw new ArgumentException (msg, "stream");
+      }
 
-      if (length < 1)
-        throw new ArgumentException ("It is less than 1.", "length");
+      if (length < 1) {
+        var msg = "Less than 1.";
+        throw new ArgumentException (msg, "length");
+      }
 
       var bytes = stream.ReadBytes (length);
 
@@ -745,7 +754,7 @@ namespace WebSocketSharp.Server
       if (len < length) {
         _log.Warn (
           String.Format (
-            "Only {0} byte(s) of data could be read from the specified stream.",
+            "Only {0} byte(s) of data could be read from the stream.",
             len
           )
         );
@@ -765,10 +774,9 @@ namespace WebSocketSharp.Server
     ///   A <c>Dictionary&lt;string, Dictionary&lt;string, bool&gt;&gt;</c>.
     ///   </para>
     ///   <para>
-    ///   It represents a collection of pairs of a service path and
-    ///   another collection of pairs of a session ID and a value
-    ///   indicating whether a pong has been received within a time
-    ///   from its client.
+    ///   It represents a collection of pairs of a service path and another
+    ///   collection of pairs of a session ID and a value indicating whether
+    ///   a pong has been received from the client within a time.
     ///   </para>
     /// </returns>
     /// <exception cref="InvalidOperationException">
@@ -786,29 +794,29 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Sends a ping with the specified <paramref name="message"/> to
-    /// every client in the WebSocket services.
+    /// Sends a ping with <paramref name="message"/> to every client in
+    /// the WebSocket services.
     /// </summary>
     /// <returns>
     ///   <para>
     ///   A <c>Dictionary&lt;string, Dictionary&lt;string, bool&gt;&gt;</c>.
     ///   </para>
     ///   <para>
-    ///   It represents a collection of pairs of a service path and
-    ///   another collection of pairs of a session ID and a value
-    ///   indicating whether a pong has been received within a time
-    ///   from its client.
+    ///   It represents a collection of pairs of a service path and another
+    ///   collection of pairs of a session ID and a value indicating whether
+    ///   a pong has been received from the client within a time.
     ///   </para>
     /// </returns>
     /// <param name="message">
-    /// A <see cref="string"/> that represents a message to send.
-    /// The size must be 125 bytes or less in UTF-8.
+    ///   <para>
+    ///   A <see cref="string"/> that represents the message to send.
+    ///   </para>
+    ///   <para>
+    ///   The size must be 125 bytes or less in UTF-8.
+    ///   </para>
     /// </param>
     /// <exception cref="InvalidOperationException">
     /// The current state of the manager is not Start.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="message"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="message"/> could not be UTF-8-encoded.
@@ -824,8 +832,8 @@ namespace WebSocketSharp.Server
         throw new InvalidOperationException (msg);
       }
 
-      if (message == null)
-        throw new ArgumentNullException ("message");
+      if (message.IsNullOrEmpty ())
+        return broadping (WebSocketFrame.EmptyPingBytes, _waitTime);
 
       byte[] bytes;
       if (!message.TryGetUTF8EncodedBytes (out bytes)) {

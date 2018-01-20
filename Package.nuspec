@@ -2,13 +2,14 @@
 <package >
   <metadata>
     <id>SeismicGames.websocket</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>sta</authors>
     <owners>SeismicGames</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Websocket library that works in Unity and otherwise.</description>
     <copyright>Copyright 2017</copyright>
     <releaseNotes>
+      1.0.7 - Include stack traces with logs
       1.0.6 - Standalone dotnet core 2.0 version included
       1.0.5 - Update library
       1.0.4 - Add PDB file

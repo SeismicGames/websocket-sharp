@@ -203,7 +203,10 @@ namespace WebSocketSharp
 
         LogData data = null;
         try {
-          data = new LogData (level, new StackFrame (2, true), message);
+          StackTrace trace = new StackTrace();
+          string outMessage = string.Format("{0}\n{1}",message, trace);
+
+          data = new LogData (level, new StackFrame (2, true), outMessage);
           _output (data, _file);
         }
         catch (Exception ex) {

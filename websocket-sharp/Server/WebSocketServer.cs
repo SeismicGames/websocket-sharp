@@ -822,12 +822,20 @@ namespace WebSocketSharp.Server
       host.StartSession (context);
     }
 
+#if NETCOREAPP2_0
+    private async void receiveRequest ()
+#else
     private void receiveRequest ()
+#endif
     {
       while (true) {
         TcpClient cl = null;
         try {
+#if NETCOREAPP2_0
+          cl = await _listener.AcceptTcpClientAsync();
+#else
           cl = _listener.AcceptTcpClient ();
+#endif
           ThreadPool.QueueUserWorkItem (
             state => {
               try {
@@ -859,6 +867,11 @@ namespace WebSocketSharp.Server
           _log.Debug (ex.ToString ());
 
           break;
+        }
+        catch (ObjectDisposedException)
+        {
+            // Should be shutting down
+            break;
         }
         catch (Exception ex) {
           _log.Fatal (ex.Message);

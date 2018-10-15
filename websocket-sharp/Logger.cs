@@ -155,8 +155,7 @@ namespace WebSocketSharp
         }
       }
     }
-
-    /// <summary>
+  /// <summary>
     /// Gets or sets the current output action used to output a log.
     /// </summary>
     /// <value>
@@ -203,10 +202,20 @@ namespace WebSocketSharp
 
         LogData data = null;
         try {
-          StackTrace trace = new StackTrace();
-          string outMessage = string.Format("{0}\n{1}",message, trace);
 
-          data = new LogData (level, new StackFrame (2, true), outMessage);
+          string outMessage;
+          if (level >= LogLevel.Error)
+          {
+            StackTrace trace = new StackTrace();
+            outMessage = string.Format("{0}\n{1}",message, trace);
+            data = new LogData (level, new StackFrame (2, true), outMessage);
+          }
+          else
+          {
+            outMessage = message;
+            data = new LogData (level, null, outMessage);
+          }
+          
           _output (data, _file);
         }
         catch (Exception ex) {

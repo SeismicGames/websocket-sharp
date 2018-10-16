@@ -48,6 +48,13 @@ namespace WebSocketSharp
 
     #region Internal Constructors
 
+    internal LogData (LogLevel level, string message)
+    {
+      _level = level;
+      _message = message ?? String.Empty;
+      _date = DateTime.Now;
+    }
+    
     internal LogData (LogLevel level, StackFrame caller, string message)
     {
       _level = level;
@@ -121,6 +128,13 @@ namespace WebSocketSharp
     public override string ToString ()
     {
       var header = String.Format ("{0}|{1,-5}|", _date, _level);
+
+      if (_caller == null)
+      {
+        var msg = String.Format("{0} {1}", header, _message);
+        return msg;
+      }
+      
       var method = _caller.GetMethod ();
       var type = method.DeclaringType;
 #if DEBUG

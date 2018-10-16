@@ -204,18 +204,19 @@ namespace WebSocketSharp
         try {
 
           string outMessage;
+
           if (level >= LogLevel.Error)
           {
             StackTrace trace = new StackTrace();
-            outMessage = string.Format("{0}\n{1}",message, trace);
-            data = new LogData (level, new StackFrame (2, true), outMessage);
+            outMessage = string.Format("{0}\n{1}", message, trace);
+            data = new LogData(level, new StackFrame(2, true), outMessage);
           }
           else
           {
             outMessage = message;
-            data = new LogData (level, null, outMessage);
+            data = new LogData(level, outMessage);
           }
-          
+
           _output (data, _file);
         }
         catch (Exception ex) {

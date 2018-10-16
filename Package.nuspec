@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>SeismicGames.websocket</id>
-    <version>1.0.13</version>
+    <version>1.0.19</version>
     <authors>sta</authors>
     <owners>SeismicGames</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Websocket library that works in Unity and otherwise.</description>
     <copyright>Copyright 2017</copyright>
     <releaseNotes>
-      1.0.13 - Changed logging to not include stack trace for logs below error
+      1.0.19 - Changed logging to not include stack trace for logs below error
 	  1.0.12 - Double version bump to get around some debug builds
 	  1.0.10 - Strip files under obj from the package
       1.0.9 - Fix for a couple linux issues. Put all the .cs files into Unity

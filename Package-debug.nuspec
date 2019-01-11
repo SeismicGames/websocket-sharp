@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SeismicGames.websocket-debug</id>
+    <version>1.0.12</version>
+    <authors>sta</authors>
+    <owners>SeismicGames</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DEBUG BUILD - Websocket library that works in Unity and otherwise.</description>
+    <copyright>Copyright 2017</copyright>
+    <releaseNotes>
+	  1.0.12 - Double version bump to get around some debug builds
+	  1.0.10 - Strip files under obj from the package
+      1.0.9 - Fix for a couple linux issues. Put all the .cs files into Unity
+      1.0.8 - Internal debug version
+      1.0.7 - Include stack traces with logs
+      1.0.6 - Standalone dotnet core 2.0 version included
+      1.0.5 - Update library
+      1.0.4 - Add PDB file
+      1.0.3 - Remove all the .NETCore garbage.
+      1.0.2 - Include meta files to avoid Unity issues.
+      1.0.1 - Add .NETCore support, hopefully doesn't break Unity.
+      1.0.0 - initial drop.
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="websocket-sharp\**\*.cs" exclude="websocket-sharp\obj\**" target="lib\net35-unity subset v3.5" />
+    <file src="DLL\netcoreapp2.0\websocket-sharp.deps.json.meta" target="lib\netcoreapp2.0" />
+    <file src="DLL\netcoreapp2.0\websocket-sharp.dll.meta" target="lib\netcoreapp2.0" />
+    <file src="DLL\netcoreapp2.0\websocket-sharp.pdb.meta" target="lib\netcoreapp2.0" />
+    <file src="websocket-sharp\bin\Debug\netcoreapp2.0\websocket-sharp.deps.json" target="lib\netcoreapp2.0" />
+    <file src="websocket-sharp\bin\Debug\netcoreapp2.0\websocket-sharp.dll" target="lib\netcoreapp2.0" />
+    <file src="websocket-sharp\bin\Debug\netcoreapp2.0\websocket-sharp.pdb" target="lib\netcoreapp2.0" />
+  </files>
+</package>

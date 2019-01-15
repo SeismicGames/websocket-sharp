@@ -8,20 +8,21 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WebSocketSharp</RootNamespace>
     <AssemblyName>websocket-sharp</AssemblyName>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;DEBUG;NETCOREAPP;NETCOREAPP2_1;NETCOREAPP2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' AND '$(TargetFramework)' != 'netcoreapp2.0' ">
     <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>TRACE;RELEASE;NETCOREAPP;NETCOREAPP2_1;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' AND '$(TargetFramework)' == 'netcoreapp2.0' ">
     <OutputPath>..\DLL</OutputPath>
@@ -37,6 +38,5 @@
   <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp2.0' ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
   </ItemGroup>
 </Project>

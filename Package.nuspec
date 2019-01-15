@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>SeismicGames.websocket</id>
-    <version>1.0.19</version>
+    <version>1.0.21</version>
     <authors>sta</authors>
     <owners>SeismicGames</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Websocket library that works in Unity and otherwise.</description>
     <copyright>Copyright 2017</copyright>
     <releaseNotes>
+      1.0.21 - Fixed define and endstream issues
+      1.0.20 - Updated to latest from sta (630d21cc15e35e3e94aec0f099d8dadf0fd58a2f)
       1.0.19 - Changed logging to not include stack trace for logs below error
 	  1.0.12 - Double version bump to get around some debug builds
 	  1.0.10 - Strip files under obj from the package

@@ -748,6 +748,9 @@ namespace WebSocketSharp
       callback =
         ar => {
           try {
+            
+            var nread = stream.EndRead (ar);
+            
             if(!stream.CanRead)
             {
                 if (length == 0 && completed != null)
@@ -755,7 +758,6 @@ namespace WebSocketSharp
                 return;
             }
 
-            var nread = stream.EndRead (ar);
             if (nread == 0 && retry < _retry) {
               retry++;
               stream.BeginRead (buff, offset, length, callback, null);

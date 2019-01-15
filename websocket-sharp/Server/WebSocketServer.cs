@@ -842,7 +842,7 @@ namespace WebSocketSharp.Server
       host.StartSession (context);
     }
 
-#if NETCOREAPP2_0
+#if !NETCOREAPP1_0 && !NETCOREAPP1_1
     private async void receiveRequest ()
 #else
     private void receiveRequest ()
@@ -851,7 +851,7 @@ namespace WebSocketSharp.Server
       while (true) {
         TcpClient cl = null;
         try {
-#if NETCOREAPP2_0
+#if !NETCOREAPP1_0 && !NETCOREAPP1_1
           cl = await _listener.AcceptTcpClientAsync();
 #else
           cl = _listener.AcceptTcpClient ();

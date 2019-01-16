@@ -771,6 +771,13 @@ namespace WebSocketSharp
 
               return;
             }
+            
+            if(nread == 0 && retry >= _retry)
+            {
+              error(new Exception("Retries expired, jduffy & rmedeirosman"));
+            }
+
+            
 
             retry = 0;
 
@@ -828,6 +835,12 @@ namespace WebSocketSharp
 
                   return;
                 }
+                
+                if(nread == 0 && retry>= _retry)
+                {
+                  error(new Exception("Retries expired, jduffy & rmedeirosman"));
+                }
+
 
                 if (nread == len) {
                   if (completed != null) {

@@ -50,6 +50,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using WebSocketSharp.Net;
 using WebSocketSharp.Net.WebSockets;
 
@@ -1172,9 +1173,13 @@ namespace WebSocketSharp
     )
     {
       Action<PayloadData, bool, bool, bool> closer = close;
+#if NETCOREAPP1_0 || NETCOREAPP1_1
       closer.BeginInvoke (
         payloadData, send, receive, received, ar => closer.EndInvoke (ar), null
       );
+#else
+      Task.Run(() => closer(payloadData, send, receive, received));
+#endif
     }
 
     private bool closeHandshake (byte[] frameAsBytes, bool receive, bool received)
@@ -1552,7 +1557,11 @@ namespace WebSocketSharp
         e = _messageEventQueue.Dequeue ();
       }
 
-      _message.BeginInvoke (e, ar => _message.EndInvoke (ar), null);
+#if NETCOREAPP1_0 || NETCOREAPP1_1
+      _message.BeginInvoke(e, ar => _message.EndInvoke(ar), null);
+#else
+      Task.Run(() => _message(e));
+#endif      
     }
 
     private bool ping (byte[] data)
@@ -1953,6 +1962,8 @@ namespace WebSocketSharp
     private void sendAsync (Opcode opcode, Stream stream, Action<bool> completed)
     {
       Func<Opcode, Stream, bool> sender = send;
+      
+#if NETCOREAPP1_0 || NETCOREAPP1_1
       sender.BeginInvoke (
         opcode,
         stream,
@@ -1972,6 +1983,23 @@ namespace WebSocketSharp
         },
         null
       );
+#else
+      Task.Run(() => sender(opcode, stream)).ContinueWith(sent =>
+      {
+        try
+        {
+          completed?.Invoke(sent.Result);
+        }
+        catch (Exception ex)
+        {
+          _logger.Error(ex.ToString());
+          error (
+            "An error has occurred during the callback for an async send.",
+            ex
+          );
+        }
+      });
+#endif
     }
 
     private bool sendBytes (byte[] bytes)
@@ -2550,6 +2578,7 @@ namespace WebSocketSharp
       }
 
       Func<bool> acceptor = accept;
+#if NETCOREAPP1_0 || NETCOREAPP1_1      
       acceptor.BeginInvoke (
         ar => {
           if (acceptor.EndInvoke (ar))
@@ -2557,6 +2586,15 @@ namespace WebSocketSharp
         },
         null
       );
+#else
+      Task.Run(acceptor).ContinueWith(task =>
+      {
+        if (task.Result)
+        {
+          open();
+        }
+      });
+#endif
     }
 
     /// <summary>
@@ -3283,6 +3321,7 @@ namespace WebSocketSharp
       }
 
       Func<bool> connector = connect;
+#if NETCOREAPP1_0 || NETCOREAPP1_1      
       connector.BeginInvoke (
         ar => {
           if (connector.EndInvoke (ar))
@@ -3290,6 +3329,15 @@ namespace WebSocketSharp
         },
         null
       );
+#else
+      Task.Run(connector).ContinueWith(task =>
+      {
+        if (task.Result)
+        {
+          open();
+        }
+      });
+#endif
     }
 
     /// <summary>

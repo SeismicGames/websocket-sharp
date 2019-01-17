@@ -2,13 +2,14 @@
 <package >
   <metadata>
     <id>SeismicGames.websocket-debug</id>
-    <version>1.0.21</version>
+    <version>1.0.22-experimental</version>
     <authors>sta</authors>
     <owners>SeismicGames</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DEBUG BUILD - Websocket library that works in Unity and otherwise.</description>
     <copyright>Copyright 2017</copyright>
     <releaseNotes>
+      1.0.22-experimental - throw on Ext.ReadBytesAsync read retry expire
       1.0.21 - Fixed define and endstream issues (supports netcore 2.1)
       1.0.20 - Updated to latest from sta (630d21cc15e35e3e94aec0f099d8dadf0fd58a2f)
 	  1.0.12 - Double version bump to get around some debug builds

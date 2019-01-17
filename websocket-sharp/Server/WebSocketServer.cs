@@ -842,19 +842,19 @@ namespace WebSocketSharp.Server
       host.StartSession (context);
     }
 
-#if !NETCOREAPP1_0 && !NETCOREAPP1_1
-    private async void receiveRequest ()
-#else
+#if NETCOREAPP1_0 || NETCOREAPP1_1
     private void receiveRequest ()
+#else
+    private async void receiveRequest ()
 #endif
     {
       while (true) {
         TcpClient cl = null;
         try {
-#if !NETCOREAPP1_0 && !NETCOREAPP1_1
-          cl = await _listener.AcceptTcpClientAsync();
-#else
+#if NETCOREAPP1_0 || NETCOREAPP1_1
           cl = _listener.AcceptTcpClient ();
+#else
+          cl = await _listener.AcceptTcpClientAsync();
 #endif
           ThreadPool.QueueUserWorkItem (
             state => {

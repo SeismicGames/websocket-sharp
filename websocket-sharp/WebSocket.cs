@@ -983,10 +983,10 @@ namespace WebSocketSharp
     }
 
     // As client
-    private bool checkHandshakeResponse (HttpResponse response, out string message)
+    private bool checkHandshakeResponse (HttpResponse response, out string message, out ushort responseCode)
     {
       message = null;
-
+      responseCode = ushort.Parse(response.StatusCode); 
       if (response.IsRedirect) {
         message = "Indicates the redirection.";
         return false;
@@ -1407,8 +1407,9 @@ namespace WebSocketSharp
       var res = sendHandshakeRequest ();
 
       string msg;
-      if (!checkHandshakeResponse (res, out msg))
-        throw new WebSocketException (CloseStatusCode.ProtocolError, msg);
+      ushort responseCode;
+      if (!checkHandshakeResponse (res, out msg, out responseCode))
+        throw new WebSocketException ((CloseStatusCode)responseCode, msg);
 
       if (_protocolsRequested)
         _protocol = res.Headers["Sec-WebSocket-Protocol"];
